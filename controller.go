@@ -118,9 +118,7 @@ func tokenAuth(next http.Handler) http.Handler{
 
 func tweet(w http.ResponseWriter, r *http.Request){
 	r.ParseForm() //parse request data
-	fmt.Println("alhamdulillah")
-	fmt.Println(r.FormValue("tweet"))
-
+	
 	//db open & will close after user tweets
 	db := connect()
 	defer db.Close()
