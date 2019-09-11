@@ -105,7 +105,7 @@ func tokenAuth(next http.Handler) http.Handler{
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return}
 		 
-		
+		next.ServeHTTP(w, r)
 	})
 	
 
@@ -118,8 +118,8 @@ func tokenAuth(next http.Handler) http.Handler{
 
 func tweet(w http.ResponseWriter, r *http.Request){
 	r.ParseForm() //parse request data
-	
-	
+	fmt.Println("alhamdulillah")
+	fmt.Println(r.FormValue("tweet"))
 
 	//db open & will close after user tweets
 	db := connect()
@@ -129,4 +129,5 @@ func tweet(w http.ResponseWriter, r *http.Request){
 	if err != nil{
 		log.Print(err)
 	}
+	w.Write([]byte("tweet posted"))
 }
