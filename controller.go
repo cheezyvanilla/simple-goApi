@@ -23,9 +23,9 @@ func signUp(w http.ResponseWriter, r *http.Request){
 	defer db.Close()
 
 	//db process
-	_, err := db.Query("INSERT INTO users(email, password) VALUES($1,$2)", email, pswd)
+	_, err := db.Query("INSERT INTO users(email, password) VALUES(?,?)", email, pswd)
 	if err != nil {
-		log.Print(err)
+		log.Print(err,email, pswd)
 	}
 }
 
@@ -45,7 +45,7 @@ func signIn(w http.ResponseWriter, r *http.Request) {
 	defer db.Close()
 
 	//user auth
-	row, err := db.Query("SELECT password FROM users WHERE email=$1", email)
+	row, err := db.Query("SELECT password FROM users WHERE email= ?", email)
 	var userPass string //variable for password
 	if err != nil{
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -119,16 +119,13 @@ func tokenAuth(next http.Handler) http.Handler{
 func tweet(w http.ResponseWriter, r *http.Request){
 	r.ParseForm() //parse request data
 	
-	//token is verified?????????????????????????
 	
-
-	// claims,ok :=
 
 	//db open & will close after user tweets
 	db := connect()
 	defer db.Close()
 
-	_, err := db.Query("INSERT INTO tweets(email, time, tweet) VALUES($1, $2, $3)", r.FormValue("email"), time.Now(), r.FormValue("tweet"))
+	_, err := db.Query("INSERT INTO tweets(email, time, tweet) VALUES(?, ?, ?)", r.FormValue("email"), time.Now(), r.FormValue("tweet"))
 	if err != nil{
 		log.Print(err)
 	}
